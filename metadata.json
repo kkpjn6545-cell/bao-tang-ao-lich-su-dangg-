@@ -1,0 +1,6 @@
+{
+  "name": "Bảo tàng Ảo Lịch sử Đảng - Hành trình Thống nhất Đất nước",
+  "description": "Bảo tàng ảo tương tác: Hành trình thống nhất đất nước về mặt Nhà nước (1975–1976) - Triển lãm số môn Lịch sử Đảng Cộng sản Việt Nam",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
