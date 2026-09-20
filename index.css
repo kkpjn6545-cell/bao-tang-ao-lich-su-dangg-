@@ -1,0 +1,279 @@
+@import "tailwindcss";
+
+:root {
+  /* --- Màu chủ đạo theo bảo tàng lịch sử Việt Nam --- */
+  --red-flag:      #A5202A;   /* đỏ cờ, đã hạ độ chói */
+  --red-flag-dark: #7A1620;
+  --gold:          #C9A227;   /* vàng sao, vàng huy chương */
+  --gold-soft:     #E4C97A;
+  --paper-cream:   #F1E7D0;   /* kem giấy cổ bảo tàng */
+  --paper-cream-2: #E7D8B8;
+  --wood-brown:    #4A3323;   /* nâu gỗ triển lãm */
+  --wood-brown-2:  #35241A;
+  --navy-deep:     #16283D;   /* xanh đậm hoàng gia */
+  --navy-deep-2:   #0E1B2B;
+  --ink:           #241A12;   /* màu chữ chính, nâu-đen ấm */
+  --ink-soft:      #55483A;
+
+  /* --- Typography --- */
+  --font-display: 'Cormorant Garamond', 'Times New Roman', Georgia, serif;
+  --font-body: 'Be Vietnam Pro', -apple-system, 'Segoe UI', sans-serif;
+
+  /* --- Layout --- */
+  --nav-height: 68px;
+  --radius-frame: 2px;
+  --shadow-deep: 0 20px 50px -20px rgba(14, 10, 6, 0.55);
+}
+
+body {
+  background-color: var(--paper-cream);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-weight: 400;
+  line-height: 1.65;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, .font-display {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--wood-brown-2);
+}
+
+/* Hạt bụi / film-grain rất nhẹ phủ toàn trang */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Nền tường bảo tàng */
+.museum-wall {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    linear-gradient(180deg, rgba(74,51,35,0.05), transparent 20%),
+    var(--paper-cream);
+}
+
+.museum-wall::before {
+  /* Đường chỉ tường phào mạ vàng */
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0.5;
+  z-index: 1;
+}
+
+/* Lá cờ đỏ sao vàng phấp phới phía sau nền tường các phòng */
+.museum-wall::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(ellipse at top center, rgba(165, 32, 42, 0.15) 0%, transparent 65%),
+    url('/assets/images/la-co.gif');
+  background-position: top 80px center;
+  background-size: min(650px, 85vw) auto;
+  background-repeat: no-repeat;
+  opacity: 0.36;
+  pointer-events: none;
+  filter: drop-shadow(0 15px 35px rgba(165, 32, 42, 0.35));
+  animation: flagWave 9s ease-in-out infinite alternate;
+}
+
+@keyframes flagWave {
+  0% {
+    transform: scale(1) translateY(0);
+    filter: brightness(1) drop-shadow(0 15px 30px rgba(165, 32, 42, 0.3));
+  }
+  50% {
+    transform: scale(1.03) translateY(-8px);
+    filter: brightness(1.06) drop-shadow(0 20px 35px rgba(165, 32, 42, 0.45));
+  }
+  100% {
+    transform: scale(1.01) translateY(4px);
+    filter: brightness(0.98) drop-shadow(0 15px 25px rgba(165, 32, 42, 0.25));
+  }
+}
+
+/* Biểu tượng cờ đỏ sao vàng hai bên sườn cố định */
+.museum-side-flag-left,
+.museum-side-flag-right {
+  position: fixed;
+  top: 120px;
+  width: 90px;
+  pointer-events: none;
+  z-index: 15;
+  opacity: 0.85;
+  transition: opacity 0.3s ease;
+  filter: drop-shadow(0 8px 16px rgba(165, 32, 42, 0.35));
+}
+.museum-side-flag-left {
+  left: 16px;
+}
+.museum-side-flag-right {
+  right: 16px;
+}
+
+/* Sàn gỗ bảo tàng */
+.museum-floor {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 20%;
+  z-index: 0;
+  background: repeating-linear-gradient(90deg, var(--wood-brown) 0 42px, var(--wood-brown-2) 42px 84px);
+  opacity: 0.9;
+  mask-image: linear-gradient(to top, black, transparent);
+  -webkit-mask-image: linear-gradient(to top, black, transparent);
+  pointer-events: none;
+}
+
+/* Ánh đèn spotlight rọi */
+.museum-spotlight {
+  position: absolute;
+  top: -10%;
+  left: 50%;
+  width: 900px;
+  height: 900px;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse at center, rgba(201,162,39,0.16), transparent 60%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Khung ảnh hiện vật chuẩn phong cách triển lãm cổ điển */
+.exhibit-frame {
+  position: relative;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+  background: var(--wood-brown-2);
+  border: 8px solid var(--wood-brown);
+  box-shadow: var(--shadow-deep);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 2px;
+}
+
+.exhibit-frame:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 26px 50px -18px rgba(14, 10, 6, 0.6);
+}
+
+.exhibit-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: sepia(0.08) contrast(1.02);
+  transition: transform 0.4s ease;
+}
+
+.exhibit-frame:hover img {
+  transform: scale(1.03);
+}
+
+.exhibit-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 30% 0%, rgba(255,230,170,0.18), transparent 60%);
+  pointer-events: none;
+}
+
+/* Bảng thông số thực tế Fact Panel */
+.fact-panel {
+  margin-top: 1.4rem;
+  padding: 1rem 1.2rem;
+  border-left: 3px solid var(--gold);
+  background: rgba(201, 162, 39, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Banner đổi tên thành phố */
+.rename-banner {
+  margin-top: 1.4rem;
+  padding: 0.9rem 1.1rem;
+  background: var(--navy-deep);
+  color: var(--paper-cream);
+  border-radius: var(--radius-frame);
+  font-size: 0.95rem;
+}
+
+.rename-banner strong {
+  color: var(--gold-soft);
+}
+
+/* Nút bấm */
+.btn-museum-primary {
+  background-color: var(--red-flag);
+  color: var(--paper-cream);
+  box-shadow: var(--shadow-deep);
+  transition: background-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.btn-museum-primary:hover {
+  background-color: var(--red-flag-dark);
+  transform: translateY(-2px);
+}
+
+.btn-museum-outline {
+  background-color: transparent;
+  border: 1px solid var(--wood-brown);
+  color: var(--wood-brown);
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+.btn-museum-outline:hover {
+  background-color: var(--wood-brown);
+  color: var(--paper-cream);
+}
+
+/* Thanh điều hướng nổi đáy trang */
+.room-floating-nav {
+  position: fixed;
+  bottom: 1.6rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 450;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: rgba(14, 27, 43, 0.92);
+  padding: 0.5rem 0.8rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(201, 162, 39, 0.35);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.5);
+}
+
+/* Scrollbar tinh tế */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--paper-cream-2);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--wood-brown);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--red-flag);
+}
